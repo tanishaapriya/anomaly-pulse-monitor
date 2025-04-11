@@ -28,7 +28,7 @@ export function BlockchainDashboard() {
       
       <div className="max-w-7xl mx-auto mt-8">
         <div className="flex items-center mb-6">
-          <Shield className="h-8 w-8 mr-3 text-dashboard-purple" />
+          <Shield className="h-8 w-8 mr-3 text-purple-500" />
           <div>
             <h1 className="text-2xl font-bold text-white">Blockchain Privacy & Security Center</h1>
             <p className="text-gray-400 text-sm mt-1">
@@ -44,15 +44,24 @@ export function BlockchainDashboard() {
           className="space-y-4"
         >
           <TabsList className="grid grid-cols-3 w-full max-w-3xl mx-auto bg-dashboard-card">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-dashboard-purple/20">
+            <TabsTrigger 
+              value="overview" 
+              className="data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400"
+            >
               <Bitcoin className="h-4 w-4 mr-2" />
               Blockchain Overview
             </TabsTrigger>
-            <TabsTrigger value="threats" className="data-[state=active]:bg-dashboard-orange/20">
+            <TabsTrigger 
+              value="threats" 
+              className="data-[state=active]:bg-orange-600/20 data-[state=active]:text-orange-400"
+            >
               <ShieldAlert className="h-4 w-4 mr-2" />
               Threat Analysis
             </TabsTrigger>
-            <TabsTrigger value="rules" className="data-[state=active]:bg-dashboard-blue/20">
+            <TabsTrigger 
+              value="rules" 
+              className="data-[state=active]:bg-blue-600/20 data-[state=active]:text-blue-400"
+            >
               <Settings className="h-4 w-4 mr-2" />
               Rule Engine
             </TabsTrigger>
@@ -63,7 +72,7 @@ export function BlockchainDashboard() {
               <Card className="bg-dashboard-card border-purple-500/20 shadow-xl">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-white flex items-center">
-                    <Lock className="h-5 w-5 mr-2 text-dashboard-purple" />
+                    <Lock className="h-5 w-5 mr-2 text-purple-500" />
                     Privacy Status
                   </CardTitle>
                   <CardDescription className="text-gray-400">
@@ -96,7 +105,7 @@ export function BlockchainDashboard() {
               <Card className="bg-dashboard-card border-blue-500/20 shadow-xl">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-white flex items-center">
-                    <Key className="h-5 w-5 mr-2 text-dashboard-blue" />
+                    <Key className="h-5 w-5 mr-2 text-blue-500" />
                     Key Management
                   </CardTitle>
                   <CardDescription className="text-gray-400">
@@ -129,7 +138,7 @@ export function BlockchainDashboard() {
               <Card className="bg-dashboard-card border-orange-500/20 shadow-xl">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-white flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-dashboard-orange" />
+                    <FileText className="h-5 w-5 mr-2 text-orange-500" />
                     Compliance
                   </CardTitle>
                   <CardDescription className="text-gray-400">

@@ -167,35 +167,45 @@ export function ThreatAnalysis() {
                       <span className="text-gray-400">Consensus Attacks</span>
                       <span className="text-gray-300">{threatsByCategory.consensus}</span>
                     </div>
-                    <Progress value={(threatsByCategory.consensus / totalThreats) * 100} className="h-1 bg-gray-700" indicatorClassName="bg-red-500" />
+                    <Progress value={(threatsByCategory.consensus / totalThreats) * 100} className="h-1 bg-gray-700">
+                      <div className="h-full bg-red-500" style={{ width: `${(threatsByCategory.consensus / totalThreats) * 100}%` }} />
+                    </Progress>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-400">Smart Contract Vulnerabilities</span>
                       <span className="text-gray-300">{threatsByCategory.contract}</span>
                     </div>
-                    <Progress value={(threatsByCategory.contract / totalThreats) * 100} className="h-1 bg-gray-700" indicatorClassName="bg-orange-500" />
+                    <Progress value={(threatsByCategory.contract / totalThreats) * 100} className="h-1 bg-gray-700">
+                      <div className="h-full bg-orange-500" style={{ width: `${(threatsByCategory.contract / totalThreats) * 100}%` }} />
+                    </Progress>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-400">Network Issues</span>
                       <span className="text-gray-300">{threatsByCategory.network}</span>
                     </div>
-                    <Progress value={(threatsByCategory.network / totalThreats) * 100} className="h-1 bg-gray-700" indicatorClassName="bg-blue-500" />
+                    <Progress value={(threatsByCategory.network / totalThreats) * 100} className="h-1 bg-gray-700">
+                      <div className="h-full bg-blue-500" style={{ width: `${(threatsByCategory.network / totalThreats) * 100}%` }} />
+                    </Progress>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-400">Key Management</span>
                       <span className="text-gray-300">{threatsByCategory.key}</span>
                     </div>
-                    <Progress value={(threatsByCategory.key / totalThreats) * 100} className="h-1 bg-gray-700" indicatorClassName="bg-purple-500" />
+                    <Progress value={(threatsByCategory.key / totalThreats) * 100} className="h-1 bg-gray-700">
+                      <div className="h-full bg-purple-500" style={{ width: `${(threatsByCategory.key / totalThreats) * 100}%` }} />
+                    </Progress>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-400">Transaction Anomalies</span>
                       <span className="text-gray-300">{threatsByCategory.transaction}</span>
                     </div>
-                    <Progress value={(threatsByCategory.transaction / totalThreats) * 100} className="h-1 bg-gray-700" indicatorClassName="bg-yellow-500" />
+                    <Progress value={(threatsByCategory.transaction / totalThreats) * 100} className="h-1 bg-gray-700">
+                      <div className="h-full bg-yellow-500" style={{ width: `${(threatsByCategory.transaction / totalThreats) * 100}%` }} />
+                    </Progress>
                   </div>
                 </div>
               </div>
@@ -222,7 +232,7 @@ export function ThreatAnalysis() {
                 </div>
               </div>
               
-              <Button className="w-full bg-dashboard-purple hover:bg-dashboard-purple/90">
+              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
                 <Lock className="h-4 w-4 mr-2" />
                 Run Security Scan
               </Button>
@@ -256,7 +266,7 @@ export function ThreatAnalysis() {
               <Button 
                 variant={threatFilter === "all" ? "default" : "outline"} 
                 size="sm" 
-                className={threatFilter === "all" ? "bg-dashboard-purple hover:bg-dashboard-purple/90" : "border-gray-700 text-gray-300 hover:bg-gray-800"} 
+                className={threatFilter === "all" ? "bg-purple-600 hover:bg-purple-700" : "border-gray-700 text-gray-300 hover:bg-gray-800"} 
                 onClick={() => setThreatFilter("all")}
               >
                 All

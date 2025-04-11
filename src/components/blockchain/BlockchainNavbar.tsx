@@ -22,15 +22,15 @@ export function BlockchainNavbar() {
   return (
     <div className="flex justify-between items-center py-4">
       <div className="flex items-center">
-        <Shield className="h-8 w-8 text-dashboard-purple mr-2" />
+        <Shield className="h-8 w-8 text-purple-500 mr-2" />
         <span className="text-xl font-bold text-white mr-10">SecureBlock</span>
         
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="flex items-center text-gray-300 hover:text-white">
+          <Link to="/" className="flex items-center text-gray-300 hover:text-white transition-colors">
             <BarChart4 className="h-5 w-5 mr-2" />
             <span>API Dashboard</span>
           </Link>
-          <Link to="/blockchain-privacy" className="flex items-center text-dashboard-purple hover:text-white">
+          <Link to="/blockchain-privacy" className="flex items-center text-purple-400 hover:text-white transition-colors">
             <Shield className="h-5 w-5 mr-2" />
             <span>Privacy Center</span>
           </Link>

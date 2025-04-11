@@ -95,10 +95,9 @@ export function Dashboard() {
           <div className="flex items-center gap-4">
             <Link to="/blockchain-privacy">
               <Button 
-                variant="outline" 
-                className="text-gray-300 border-gray-700 hover:bg-gray-800"
+                className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20 border border-purple-500/30 transition-all duration-300"
               >
-                <Shield className="h-4 w-4 mr-2 text-dashboard-purple" />
+                <Shield className="h-4 w-4 mr-2 text-white" />
                 Security Center
               </Button>
             </Link>
