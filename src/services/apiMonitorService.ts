@@ -1,3 +1,4 @@
+
 import { toast } from "sonner";
 
 // Data types
@@ -161,6 +162,8 @@ const generateIssuesForMetric = (metric: string, status: 'healthy' | 'warning' |
   if (status === 'healthy') return [];
   
   const metricIssues = issueTypes[metric as keyof typeof issueTypes];
+  if (!metricIssues) return []; // Handle case where metric key doesn't exist
+  
   const issueCount = status === 'critical' ? 2 : 1;
   
   return Array.from({ length: issueCount }).map(() => {
