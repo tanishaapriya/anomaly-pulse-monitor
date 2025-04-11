@@ -5,9 +5,9 @@ import { IssueDetails } from "./IssueDetails";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface MetricCardProps {
   title: string;
@@ -68,18 +68,18 @@ export function MetricCard({ title, value, metric, icon, color, bgColor }: Metri
         </div>
         
         {metric.issues && metric.issues.length > 0 ? (
-          <Tooltip>
-            <TooltipTrigger>
-              <div className={`${getStatusColor(metric.status)}`}>
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <button className={`${getStatusColor(metric.status)} focus:outline-none`}>
                 <AlertCircleIcon className="h-5 w-5" />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="w-72 p-0 bg-dashboard-card border border-gray-700">
+              </button>
+            </HoverCardTrigger>
+            <HoverCardContent side="right" className="w-72 p-0 bg-dashboard-card border border-gray-700">
               <div className="p-3">
                 <IssueDetails issues={metric.issues} metricName={formatMetricTitle(title)} />
               </div>
-            </TooltipContent>
-          </Tooltip>
+            </HoverCardContent>
+          </HoverCard>
         ) : (
           <div className={`${getStatusColor(metric.status)}`}>
             <div className="h-5 w-5" />

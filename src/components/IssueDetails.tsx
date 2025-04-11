@@ -25,14 +25,16 @@ export function IssueDetails({ issues, metricName }: IssueDetailsProps) {
               <div className="font-medium text-xs text-dashboard-purple">{issue.type}</div>
               <div className="flex items-center text-xs text-gray-400">
                 <PieChartIcon size={12} className="mr-1" />
-                {(issue.confidence * 100).toFixed(0)}% confidence
+                {issue.confidence ? `${(issue.confidence * 100).toFixed(0)}% confidence` : 'No confidence data'}
               </div>
             </div>
             <p className="text-xs text-gray-300 mt-1">{issue.description}</p>
-            <div className="flex items-start mt-2 text-xs text-gray-400">
-              <WrenchIcon size={12} className="mr-1 mt-0.5 shrink-0 text-dashboard-orange" />
-              <span>{issue.solution}</span>
-            </div>
+            {issue.solution && (
+              <div className="flex items-start mt-2 text-xs text-gray-400">
+                <WrenchIcon size={12} className="mr-1 mt-0.5 shrink-0 text-dashboard-orange" />
+                <span>{issue.solution}</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
