@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { ApiMetrics, fetchApiMetrics } from "@/services/apiMonitorService";
 import { MetricCard } from "./MetricCard";
 import { DetailChart } from "./DetailChart";
-import { AnomalyList } from "./AnomalyList";
-import { PredictionChart } from "./PredictionChart";
-import { BarChart4, AlertCircle, Activity, Globe, RefreshCw, Calendar, Info } from "lucide-react";
+import { EnhancedAnomalyList } from "./EnhancedAnomalyList";
+import { EnhancedPredictionChart } from "./EnhancedPredictionChart";
+import { ActiveEndpointsChart } from "./ActiveEndpointsChart";
+import { BarChart4, AlertCircle, Activity, Globe, RefreshCw, Calendar, Info, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 export function Dashboard() {
   const [metrics, setMetrics] = useState<ApiMetrics | null>(null);
@@ -91,6 +93,15 @@ export function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link to="/blockchain-privacy">
+              <Button 
+                variant="outline" 
+                className="text-gray-300 border-gray-700 hover:bg-gray-800"
+              >
+                <Shield className="h-4 w-4 mr-2 text-dashboard-purple" />
+                Security Center
+              </Button>
+            </Link>
             <div className="hidden md:flex items-center space-x-3 bg-dashboard-card px-4 py-2 rounded-lg border border-gray-700">
               <div className="flex items-center">
                 <div className="w-2 h-2 rounded-full bg-red-500 mr-1"></div>
@@ -155,6 +166,11 @@ export function Dashboard() {
           />
         </div>
 
+        {/* Active Endpoints Chart */}
+        <div className="mb-6">
+          <ActiveEndpointsChart metric={metrics.activeEndpoints} />
+        </div>
+
         {/* Detailed Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <DetailChart 
@@ -183,23 +199,18 @@ export function Dashboard() {
               gradient={["#0EA5E9", "#1A1F2C"]}
               formatValue={(value) => `${value.toFixed(0)}/min`}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <PredictionChart 
-                title="responseTime" 
-                predictions={metrics.predictions}
-                currentValue={metrics.responseTime.current}
-                color="#8B5CF6"
-              />
-              <PredictionChart 
-                title="errorRate" 
-                predictions={metrics.predictions}
-                currentValue={metrics.errorRate.current}
-                color="#F97316"
-              />
-            </div>
+            <EnhancedPredictionChart 
+              predictions={metrics.predictions}
+              currentValues={{
+                responseTime: metrics.responseTime.current,
+                errorRate: metrics.errorRate.current,
+                requestRate: metrics.requestRate.current,
+                activeEndpoints: metrics.activeEndpoints.current
+              }}
+            />
           </div>
           <div className="lg:col-span-1">
-            <AnomalyList anomalies={metrics.anomalies} />
+            <EnhancedAnomalyList anomalies={metrics.anomalies} />
           </div>
         </div>
       </div>
