@@ -5,8 +5,10 @@ import { MetricCard } from "./MetricCard";
 import { DetailChart } from "./DetailChart";
 import { AnomalyList } from "./AnomalyList";
 import { PredictionChart } from "./PredictionChart";
-import { BarChart4, AlertCircle, Activity, Globe, RefreshCw } from "lucide-react";
+import { BarChart4, AlertCircle, Activity, Globe, RefreshCw, Calendar, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { format } from "date-fns";
 
 export function Dashboard() {
   const [metrics, setMetrics] = useState<ApiMetrics | null>(null);
@@ -70,26 +72,52 @@ export function Dashboard() {
     );
   }
 
+  const getAnomaliesCount = (severity: 'high' | 'medium' | 'low' | 'all') => {
+    if (severity === 'all') return metrics.anomalies.length;
+    return metrics.anomalies.filter(a => a.severity === severity).length;
+  };
+
   return (
-    <div className="min-h-screen bg-dashboard-background p-6">
+    <div className="min-h-screen bg-dashboard-background p-6 overflow-auto">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-white">API Monitoring Dashboard</h1>
-            <p className="text-gray-400">
-              Last updated: {lastUpdate.toLocaleTimeString()}
-            </p>
+            <div className="flex items-center mt-1 text-gray-400 text-sm">
+              <Calendar className="h-4 w-4 mr-1" />
+              <span className="mr-3">{format(new Date(), 'MMMM d, yyyy')}</span>
+              <Info className="h-4 w-4 mr-1" />
+              <span>Last updated: {format(lastUpdate, 'HH:mm:ss')}</span>
+            </div>
           </div>
-          <Button 
-            variant="outline" 
-            onClick={fetchData}
-            className="text-gray-300 border-gray-700 hover:bg-gray-800"
-            disabled={loading}
-          >
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center space-x-3 bg-dashboard-card px-4 py-2 rounded-lg border border-gray-700">
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full bg-red-500 mr-1"></div>
+                <span className="text-xs text-gray-300">High: {getAnomaliesCount('high')}</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full bg-yellow-400 mr-1"></div>
+                <span className="text-xs text-gray-300">Medium: {getAnomaliesCount('medium')}</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full bg-blue-500 mr-1"></div>
+                <span className="text-xs text-gray-300">Low: {getAnomaliesCount('low')}</span>
+              </div>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={fetchData}
+              className="text-gray-300 border-gray-700 hover:bg-gray-800"
+              disabled={loading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
         </div>
+
+        <Separator className="my-4 bg-gray-800" />
 
         {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

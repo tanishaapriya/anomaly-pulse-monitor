@@ -1,98 +1,104 @@
 
 import { MetricData } from "@/services/apiMonitorService";
-import { ArrowDownIcon, ArrowUpIcon, MinusIcon } from "lucide-react";
-import { LineChart, Line, ResponsiveContainer } from "recharts";
-import { cn } from "@/lib/utils";
+import { TrendingUpIcon, TrendingDownIcon, AlertCircleIcon } from "lucide-react";
+import { IssueDetails } from "./IssueDetails";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MetricCardProps {
   title: string;
-  metric: MetricData;
   value: string;
+  metric: MetricData;
   icon: React.ReactNode;
   color: string;
   bgColor: string;
 }
 
-export function MetricCard({ title, metric, value, icon, color, bgColor }: MetricCardProps) {
-  const getTrendIcon = () => {
-    switch (metric.trend) {
-      case 'up':
-        return <ArrowUpIcon className="h-4 w-4" />;
-      case 'down':
-        return <ArrowDownIcon className="h-4 w-4" />;
-      default:
-        return <MinusIcon className="h-4 w-4" />;
-    }
-  };
-
-  const getTrendColor = () => {
-    if (title === 'Error Rate' || title === 'Response Time') {
-      // For these metrics, up is bad, down is good
-      return metric.trend === 'up' ? 'text-red-500' : metric.trend === 'down' ? 'text-green-500' : 'text-yellow-400';
-    } else {
-      // For these metrics, up is good, down is bad
-      return metric.trend === 'up' ? 'text-green-500' : metric.trend === 'down' ? 'text-red-500' : 'text-yellow-400';
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (metric.status) {
+export function MetricCard({ title, value, metric, icon, color, bgColor }: MetricCardProps) {
+  const getStatusColor = (status: MetricData["status"]) => {
+    switch (status) {
       case 'healthy':
-        return 'bg-green-500';
+        return 'text-green-500';
       case 'warning':
-        return 'bg-yellow-400';
+        return 'text-yellow-400';
       case 'critical':
-        return 'bg-red-500 animate-pulse-slow';
+        return 'text-red-500';
       default:
-        return 'bg-gray-400';
+        return 'text-gray-400';
     }
   };
-
-  const getDiff = () => {
-    const diff = ((metric.current - metric.previous) / metric.previous) * 100;
-    if (isNaN(diff) || !isFinite(diff)) return '0%';
-    return diff > 0 ? `+${diff.toFixed(1)}%` : `${diff.toFixed(1)}%`;
+  
+  const getTrendIcon = (trend: MetricData['trend']) => {
+    switch (trend) {
+      case 'up':
+        return metric.status === 'critical' ? 
+          <TrendingUpIcon className="h-4 w-4 text-red-500" /> : 
+          <TrendingUpIcon className="h-4 w-4 text-green-500" />;
+      case 'down':
+        return metric.status === 'critical' ? 
+          <TrendingDownIcon className="h-4 w-4 text-green-500" /> : 
+          <TrendingDownIcon className="h-4 w-4 text-red-500" />;
+      default:
+        return null;
+    }
+  };
+  
+  const getPercentChange = () => {
+    if (metric.previous === 0) return 0;
+    const change = ((metric.current - metric.previous) / metric.previous) * 100;
+    return Math.abs(change).toFixed(1);
   };
 
+  const formatMetricTitle = (title: string) => {
+    return title.toLowerCase().replace(/\s+/g, '');
+  };
+  
   return (
-    <div className={`rounded-lg overflow-hidden shadow-lg border ${bgColor} border-opacity-20`}>
-      <div className="p-4 text-white">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center space-x-2">
-            <div className={`p-2 rounded-full ${color} bg-opacity-20`}>
-              {icon}
-            </div>
-            <h3 className="font-medium text-sm">{title}</h3>
+    <div className={`bg-dashboard-card rounded-lg p-4 shadow-lg border-l-4 ${bgColor}`}>
+      <div className="flex justify-between items-start">
+        <div className="flex items-center">
+          <div className={`${color} p-2 rounded-full bg-opacity-20 mr-3`}>
+            {icon}
           </div>
-          <div className={`h-2 w-2 rounded-full ${getStatusColor()}`} />
+          <h3 className="font-medium text-white">{title}</h3>
         </div>
         
-        <div className="flex justify-between items-end">
-          <div>
-            <div className="text-2xl font-bold">{value}</div>
-            <div className="flex items-center text-xs mt-1">
-              <span className={cn("flex items-center", getTrendColor())}>
-                {getTrendIcon()}
-                <span className="ml-1">{getDiff()}</span>
-              </span>
-            </div>
+        {metric.issues && metric.issues.length > 0 ? (
+          <Tooltip>
+            <TooltipTrigger>
+              <div className={`${getStatusColor(metric.status)}`}>
+                <AlertCircleIcon className="h-5 w-5" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="w-72 p-0 bg-dashboard-card border border-gray-700">
+              <div className="p-3">
+                <IssueDetails issues={metric.issues} metricName={formatMetricTitle(title)} />
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <div className={`${getStatusColor(metric.status)}`}>
+            <div className="h-5 w-5" />
           </div>
-          
-          <div className="h-12 w-24">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={metric.history}>
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke={color.replace('bg-', 'rgb(')} 
-                  strokeWidth={2} 
-                  dot={false} 
-                  isAnimationActive={true}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+        )}
+      </div>
+      
+      <div className="mt-2 flex justify-between items-end">
+        <div className="text-2xl font-bold text-white">{value}</div>
+        {metric.trend !== 'stable' && (
+          <div className="flex items-center">
+            {getTrendIcon(metric.trend)}
+            <span className={`text-xs ml-1 ${metric.trend === 'up' ? 
+              (metric.status === 'critical' ? 'text-red-500' : 'text-green-500') : 
+              (metric.status === 'critical' ? 'text-green-500' : 'text-red-500')}`}>
+              {getPercentChange()}%
+            </span>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
